@@ -1,2 +1,5 @@
+build/
+install/
 log/
-__pycache/
+__pycache__/
+data/

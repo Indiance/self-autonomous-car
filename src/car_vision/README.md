@@ -43,6 +43,26 @@ Option C — launch file (publisher + viewer together):
 ros2 launch car_vision camera.launch.py view:=true
 ```
 
+## Collect training data
+
+`image_collector` subscribes to the camera topic and saves frames to disk at a throttled rate, for building an object-detection training set.
+
+```bash
+ros2 run car_vision image_collector --ros-args -p save_rate:=1.0
+```
+
+Or via the launch file, alongside the publisher:
+
+```bash
+ros2 launch car_vision camera.launch.py collect:=true save_rate:=1.0
+```
+
+Each run creates a timestamped session folder under `data/captures/` (e.g. `data/captures/session_20260703_153000/`) containing sequentially numbered frames, so repeated runs never overwrite each other. `data/` is gitignored — it's a local dataset directory, not part of the package.
+
+Parameters: `topic` (default `camera/image_raw`), `output_dir` (default `~/Desktop/self_autonomous_car/data/captures`), `save_rate` (frames per second saved, default `1.0`), `image_format` (default `jpg`), `session_name` (default auto-timestamped).
+
+Note: frames captured before the camera is mounted on the car (e.g. pointed at a desk) are only useful for testing the pipeline — real dataset collection should happen once the camera is at its actual driving position/angle.
+
 ## Notes
 
 - Requires the `nvargus-daemon` systemd service to be running (`systemctl status nvargus-daemon`) — it owns the CSI camera on Jetson.

@@ -14,6 +14,10 @@ def generate_launch_description():
         DeclareLaunchArgument('flip_method', default_value='0'),
         DeclareLaunchArgument('view', default_value='false',
                                description='Also launch the local cv2 image viewer window'),
+        DeclareLaunchArgument('collect', default_value='false',
+                               description='Also launch the dataset image collector node'),
+        DeclareLaunchArgument('save_rate', default_value='1.0',
+                               description='Frames per second saved by the image collector'),
 
         Node(
             package='car_vision',
@@ -35,5 +39,16 @@ def generate_launch_description():
             name='image_viewer',
             output='screen',
             condition=IfCondition(LaunchConfiguration('view')),
+        ),
+
+        Node(
+            package='car_vision',
+            executable='image_collector',
+            name='image_collector',
+            output='screen',
+            parameters=[{
+                'save_rate': LaunchConfiguration('save_rate'),
+            }],
+            condition=IfCondition(LaunchConfiguration('collect')),
         ),
     ])

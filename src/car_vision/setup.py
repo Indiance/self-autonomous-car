@@ -23,6 +23,7 @@ setup(
         'console_scripts': [
             'csi_camera_publisher = car_vision.csi_camera_publisher:main',
             'image_viewer = car_vision.image_viewer:main',
+            'image_collector = car_vision.image_collector:main',
         ],
     },
 )
